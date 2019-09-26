@@ -96,15 +96,15 @@ void autonomous() {}
 		lift.set_brake_mode       (pros::E_MOTOR_BRAKE_HOLD);
 		stacker.set_brake_mode    (pros::E_MOTOR_BRAKE_HOLD);
 
-		int forwardback = master.get_analog (ANALOG_LEFT_Y);
-		int stride      = master.get_analog (ANALOG_LEFT_X);
-		int turn        = master.get_analog (ANALOG_RIGHT_X);
+		int y = master.get_analog (ANALOG_LEFT_Y);
+		int x = master.get_analog (ANALOG_LEFT_X);
+		int z = master.get_analog (ANALOG_RIGHT_X);
 
 		// chasis
-		leftfront.move  (forwardback + stride + turn);
-		leftback.move   (forwardback + stride - turn);
-		rightfront.move (forwardback - stride - turn);
-		rightback.move  (forwardback - stride + turn);
+		leftfront.move  (y + x + z);
+		leftback.move   (y - x + z);
+		rightfront.move (y - x - z);
+		rightback.move  (y + x - z);
 
 		//lift
 		if(master.get_digital(DIGITAL_L1))
