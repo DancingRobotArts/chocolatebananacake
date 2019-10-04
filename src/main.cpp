@@ -8,10 +8,10 @@
  */
 
  pros::Controller master(pros::E_CONTROLLER_MASTER);
- pros::Motor leftfront  (1, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor leftback   (2, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor rightfront (3, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor rightback  (4, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor leftfront  (1, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor leftback   (2, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor rightfront (3, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor rightback  (4, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor clawleft   (8, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor clawright  (9, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor lift       (10, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
@@ -68,7 +68,32 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+
+	leftfront.move_velocity(100);
+	leftback.move_velocity(100);
+	rightfront.move_velocity(100);
+	rightback.move_velocity(100);
+	pros::delay(2000);
+
+	clawleft.move_velocity(-100);
+	clawright.move_velocity(-100);
+	clawleft.move_velocity(0);
+	clawright.move_velocity(0);
+	pros::delay(1000);
+
+	leftfront.move_velocity(-100);
+	leftback.move_velocity(-100);
+	rightfront.move_velocity(-100);
+	rightback.move_velocity(-100);
+	pros::delay(1200);
+
+	leftfront.move_velocity(0);
+	leftback.move_velocity(0);
+	rightfront.move_velocity(0);
+	rightback.move_velocity(0);
+	pros::delay(1500);
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
