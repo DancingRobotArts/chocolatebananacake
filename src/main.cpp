@@ -110,7 +110,42 @@ void autonomous() {
  */
  void opcontrol() {
 
+   char mytext[64];
+
+/*Create a screen*/
+lv_obj_t * scr = lv_obj_create(NULL, NULL);
+lv_scr_load(scr);                                  /*Load the screen*/
+   lv_obj_clean(lv_scr_act());  // clean screen
+  lv_obj_t * title = lv_label_create(lv_scr_act(), NULL);
+  lv_label_set_text(title, "Debug");
+  lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_MID, 0, 20);  /*Align to the top*/
+
+
+
+  /*Create a new label*/
+  lv_obj_t * txt = lv_label_create(lv_scr_act(), NULL);
+  //lv_obj_set_style(txt, &style_txt);                    /*Set the created style*/
+  lv_label_set_long_mode(txt, LV_LABEL_LONG_BREAK);     /*Break the long lines*/
+  lv_label_set_recolor(txt, true);                      /*Enable re-coloring by commands in the text*/
+  lv_label_set_align(txt, LV_LABEL_ALIGN_LEFT);       /*Center aligned lines*/
+  lv_label_set_text(txt, NULL);
+  lv_obj_set_width(txt, 500);                           /*Set a width*/
+  lv_obj_align(txt, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 20);      /*Align to center*/
+
 	while (true) {
+
+    // assign value to mytext
+sprintf(mytext, "leftfront: %8.2f\n"
+  "rightfront: %8.2f\n"
+  "stacker: %8.2f\n"
+  "arm: %8.2f",
+     leftfront.get_position(),
+     rightfront.get_position(),
+  stacker.get_position(),
+  lift.get_position()
+   );
+// print to screen
+lv_label_set_text(txt, mytext);
 
 		leftfront.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
   	leftback.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
@@ -132,9 +167,16 @@ void autonomous() {
 		rightback.move  (y + x - z);
 
 		//lift
-		if(master.get_digital(DIGITAL_L1))
+		if(master.get_digital(DIGITAL_L1) )
 		{
+      if (stacker.get_position()>-300.0) {
+             stacker.move_velocity(-50);
+             //pros::delay(20);
+          } else {
+            stacker.move_velocity(0);
+
 				lift.move_velocity (100);
+      }
 		}
 		else if(master.get_digital(DIGITAL_L2))
 		{
@@ -163,7 +205,7 @@ void autonomous() {
 		}
 
 		//stacker
-		if(master.get_digital(DIGITAL_R2))
+		if(master.get_digital(DIGITAL_R2)  )
 		{
 				stacker.move_velocity (50);
 		}
@@ -171,7 +213,7 @@ void autonomous() {
 		{
 				stacker.move_velocity (-50);
 		}
-		else
+		else if (master.get_digital(DIGITAL_L1)==0)
 		{
 			stacker.move_velocity (0);
 		}
