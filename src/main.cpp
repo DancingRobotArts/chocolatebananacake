@@ -1,17 +1,13 @@
 #include "main.h"
 #include "config.hpp"
 #include "gui.h"
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
+
+
  pros::Controller master(pros::E_CONTROLLER_MASTER);
  pros::Motor leftfront  (1, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor leftback   (2, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor rightfront (3, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor rightback  (4, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor leftback   (2, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor rightfront (16, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor rightback  (17, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor clawleft   (8, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor clawright  (9, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor lift       (10, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
@@ -25,6 +21,7 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+  pros::delay(100);
   gui();
 }
 
@@ -62,10 +59,10 @@ void autonomous() {
   redblue side=red;
   frontback isfront=front;
 
-  // 1 red front
-  // 2 blue front
-  // 3 red back
-  // 4 blue back
+  // 1 red big
+  // 2 blue big
+  // 3 red small
+  // 4 blue small
   // 5 skills 1
   // 6 none
 
@@ -73,231 +70,191 @@ void autonomous() {
   {
     case 1:
     {
-      side    = red;
-      isfront = front;
+      leftfront.move_velocity(100);      //front
+      leftback.move_velocity(100);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(100);
+      pros::delay(2000);
+
+      leftfront.move_velocity(-100);     //back
+      leftback.move_velocity(-100);
+      rightfront.move_velocity(-100);
+      rightback.move_velocity(-100);
+      pros::delay(1200);
+
+      leftfront.move_velocity(0);      //stop
+      leftback.move_velocity(0);
+      rightfront.move_velocity(0);
+      rightback.move_velocity(0);
+      pros::delay(1500);
       break;
     }
     case 2:
     {
-      side    = blue;
-      isfront = front;
+      leftfront.move_velocity(100);      //forwards
+      leftback.move_velocity(100);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(100);
+      pros::delay(2000);
+
+      leftfront.move_velocity(-100);     //backwards
+      leftback.move_velocity(-100);
+      rightfront.move_velocity(-100);
+      rightback.move_velocity(-100);
+      pros::delay(1200);
+
+      leftfront.move_velocity(0);      //stop
+      leftback.move_velocity(0);
+      rightfront.move_velocity(0);
+      rightback.move_velocity(0);
+      pros::delay(1500);
       break;
     }
     case 3:
     {
-      side    = red;
-      isfront = back;
+      lift.move_velocity(100);           //lift up
+      pros::delay(1000);
+
+      lift.move_velocity(-100);          //lift down
+      pros::delay(1000);
+
+      clawleft.move_velocity(100);       //intake cubes
+      clawright.move_velocity(100);
+      pros::delay(5000);
+
+      leftfront.move_velocity(100);      //move forwards
+      leftback.move_velocity(100);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(100);
+      pros::delay(3000);
+
+      leftfront.move_velocity(-100);     //backwards
+      leftback.move_velocity(-100);
+      rightfront.move_velocity(-100);
+      rightback.move_velocity(-100);
+      pros::delay(2000);
+
+      leftfront.move_velocity(100);     //turn 145 right
+      leftback.move_velocity(100);
+      rightfront.move_velocity(-100);
+      rightback.move_velocity(-100);
+      pros::delay(750);
+
+      leftfront.move_velocity(100);      //move forwards
+      leftback.move_velocity(100);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(100);
+      pros::delay(1000);
+
+      leftfront.move_velocity(0);     //stop moving
+      leftback.move_velocity(0);
+      rightfront.move_velocity(0);
+      rightback.move_velocity(0);
+      pros::delay(100);
+
+      clawleft.move_velocity(-50);     //intake out
+      clawright.move_velocity(-50);
+      pros::delay(300);
+
+      clawleft.move_velocity(0);      //intake stop
+      clawright.move_velocity(0);
+      pros::delay(50);
+
+      stacker.move_velocity(100);     //stacker out
+      pros::delay(1000);
+
+      stacker.move_velocity(-100);    //stacker in
+      pros::delay(1000);
+
+      stacker.move_velocity(0);      //stacker stop
+      pros::delay(50);
+
+      leftfront.move_velocity(-100);     //move backwards
+      leftback.move_velocity(-100);
+      rightfront.move_velocity(-100);
+      rightback.move_velocity(-100);
+      pros::delay(500);
+
+      leftfront.move_velocity(0);     //stop moving
+      leftback.move_velocity(0);
+      rightfront.move_velocity(0);
+      rightback.move_velocity(0);
+      pros::delay(50);
       break;
     }
     case 4:
     {
-      side    = blue;
-      isfront = back;
+      leftfront.move_velocity(100);     //move forwards
+      leftback.move_velocity(100);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(100);
+      pros::delay(4000);
+
+      clawleft.move_velocity(100);      //intake cubes
+      clawright.move_velocity(100);
+      pros::delay(5000);
+
+      leftfront.move_velocity(-100);      //turn 90 left
+      leftback.move_velocity(-100);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(100);
+      pros::delay(750);
+
+      leftfront.move_velocity(-100);      //stride left
+      leftback.move_velocity(100);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(-100);
+      pros::delay(4000);
+
+      leftfront.move_velocity(0);     //stop moving
+      leftback.move_velocity(0);
+      rightfront.move_velocity(0);
+      rightback.move_velocity(0);
+      pros::delay(100);
+
+      clawleft.move_velocity(-50);      //intake out
+      clawright.move_velocity(-50);
+      pros::delay(500);
+
+      clawleft.move_velocity(0);      //intake stop
+      clawright.move_velocity(0);
+      pros::delay(100);
+
+      stacker.move_velocity(100);     //stacker out
+      pros::delay(1000);
+
+      stacker.move_velocity(-100);      //stacker in
+      pros::delay(1000);
+
+      stacker.move_velocity(0);     //stacker stop
+      pros::delay(100);
+
+      leftfront.move_velocity(-100);      //move backwards
+      leftback.move_velocity(-100);
+      rightfront.move_velocity(-100);
+      rightback.move_velocity(-100);
+      pros::delay(1000);
+
+      leftfront.move_velocity(0);     //stop moving
+      leftback.move_velocity(0);
+      rightfront.move_velocity(0);
+      rightback.move_velocity(0);
+      pros::delay(100);
       break;
     }
     case 5:
     {
-      side    = red;
-      isfront = front;
       break;
     }
     case 6:
     {
-      side    = blue;
-      isfront = front;
       break;
     }
     default:
     {
       break;
     }
-  }
-
-  if (auton_sel>=1 && auton_sel <=4 ) {
-    switch (isfront) {
-      case front : { //////////////////////// front ///////////////////////////
-        if (side==blue) {
-          master.print   (0, 0, "bluefront: %d", auton_sel, blue, isfront);
-
-          master.clear();
-
-        	leftfront.move_velocity(100);      //move forward
-        	leftback.move_velocity(100);
-        	rightfront.move_velocity(100);
-        	rightback.move_velocity(100);
-        	pros::delay(2000);
-
-        	leftfront.move_velocity(-100);     //move backwards
-        	leftback.move_velocity(-100);
-        	rightfront.move_velocity(-100);
-        	rightback.move_velocity(-100);
-        	pros::delay(1200);
-
-        	leftfront.move_velocity(0);      //stop
-        	leftback.move_velocity(0);
-        	rightfront.move_velocity(0);
-        	rightback.move_velocity(0);
-        	pros::delay(1500);
-
-        } else {
-           master.print  (0, 0, "redfront:  %d", auton_sel);
-
-           master.clear();
-
-          leftfront.move_velocity(100);     //move forward
-          leftback.move_velocity(100);
-          rightfront.move_velocity(100);
-          rightback.move_velocity(100);
-          pros::delay(2000);
-
-          leftfront.move_velocity(-100);      //move backwards
-          leftback.move_velocity(-100);
-          rightfront.move_velocity(-100);
-          rightback.move_velocity(-100);
-          pros::delay(1200);
-
-          leftfront.move_velocity(0);     //stop
-          leftback.move_velocity(0);
-          rightfront.move_velocity(0);
-          rightback.move_velocity(0);
-          pros::delay(1500);
-        }
-
-        if (auton_sel>=2 && auton_sel <=3 ) {
-          switch (isfront) {
-            case front : { //////////////////////// front ///////////////////////////
-              if (side==blue) {
-                master.print   (0, 0, "blueback: %d", auton_sel, blue, isfront);
-
-                master.clear();
-
-                leftfront.move_velocity(100);     //move forwards
-                leftback.move_velocity(100);
-                rightfront.move_velocity(100);
-                rightback.move_velocity(100);
-                pros::delay(4000);
-
-                clawleft.move_velocity(100);      //intake cubes
-                clawright.move_velocity(100);
-                pros::delay(5000);
-
-                leftfront.move_velocity(-100);      //turn 90 left
-                leftback.move_velocity(-100);
-                rightfront.move_velocity(100);
-                rightback.move_velocity(100);
-                pros::delay(750);
-
-                leftfront.move_velocity(-100);      //stride left
-                leftback.move_velocity(100);
-                rightfront.move_velocity(100);
-                rightback.move_velocity(-100);
-                pros::delay(4000);
-
-                leftfront.move_velocity(0);     //stop moving
-                leftback.move_velocity(0);
-                rightfront.move_velocity(0);
-                rightback.move_velocity(0);
-                pros::delay(100);
-
-                clawleft.move_velocity(-50);      //intake out
-                clawright.move_velocity(-50);
-                pros::delay(500);
-
-                clawleft.move_velocity(0);      //intake stop
-                clawright.move_velocity(0);
-                pros::delay(100);
-
-                stacker.move_velocity(100);     //stacker out
-                pros::delay(1000);
-
-                stacker.move_velocity(-100);      //stacker in
-                pros::delay(1000);
-
-                stacker.move_velocity(0);     //stacker stop
-                pros::delay(100);
-
-                leftfront.move_velocity(-100);      //move backwards
-                leftback.move_velocity(-100);
-                rightfront.move_velocity(-100);
-                rightback.move_velocity(-100);
-                pros::delay(1000);
-
-                leftfront.move_velocity(0);     //stop moving
-                leftback.move_velocity(0);
-                rightfront.move_velocity(0);
-                rightback.move_velocity(0);
-                pros::delay(100);
-
-              } else {
-                 master.print  (0, 0, "redback:  %d", auton_sel);
-
-                 master.clear();
-
-                 leftfront.move_velocity(100);      //move forwards
-                 leftback.move_velocity(100);
-                 rightfront.move_velocity(100);
-                 rightback.move_velocity(100);
-                 pros::delay(4000);
-
-                 clawleft.move_velocity(100);     //intake cubes
-                 clawright.move_velocity(100);
-                 pros::delay(5000);
-
-                 leftfront.move_velocity(100);     //turn 90 right
-                 leftback.move_velocity(100);
-                 rightfront.move_velocity(-100);
-                 rightback.move_velocity(-100);
-                 pros::delay(750);
-
-                 leftfront.move_velocity(-100);     //stride right
-                 leftback.move_velocity(100);
-                 rightfront.move_velocity(100);
-                 rightback.move_velocity(-100);
-                 pros::delay(4000);
-
-                 leftfront.move_velocity(0);     //stop moving
-                 leftback.move_velocity(0);
-                 rightfront.move_velocity(0);
-                 rightback.move_velocity(0);
-                 pros::delay(100);
-
-                 clawleft.move_velocity(-50);     //intake out
-                 clawright.move_velocity(-50);
-                 pros::delay(500);
-
-                 clawleft.move_velocity(0);     //intake stop
-                 clawright.move_velocity(0);
-                 pros::delay(100);
-
-                 stacker.move_velocity(100);     //stacker out
-                 pros::delay(1000);
-
-                 stacker.move_velocity(-100);     //stacker in
-                 pros::delay(1000);
-
-                 stacker.move_velocity(0);     //stacker stop
-                 pros::delay(100);
-
-                 leftfront.move_velocity(-100);     //move backwards
-                 leftback.move_velocity(-100);
-                 rightfront.move_velocity(-100);
-                 rightback.move_velocity(-100);
-                 pros::delay(1000);
-
-                 leftfront.move_velocity(0);     //stop moving
-                 leftback.move_velocity(0);
-                 rightfront.move_velocity(0);
-                 rightback.move_velocity(0);
-                 pros::delay(100);
-              }
-
-  }}} else if (auton_sel ==5 )
-  {
-    //////////////////////////////// skill 1 //////////////////////////////////
-  } else if (auton_sel == 6)
-  {
-
-  }}}}}
+  }}
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -366,7 +323,16 @@ int turn        = master.get_analog (ANALOG_RIGHT_X);
 
 
 		//lift
-		if(master.get_digital(DIGITAL_L1))
+
+  if(master.get_digital(DIGITAL_Y))
+    {
+      lift.move_absolute(430.20, 100);
+    }
+    else if(master.get_digital(DIGITAL_B))
+      {
+        lift.move_absolute(617.20, 100);
+      }
+		else if(master.get_digital(DIGITAL_L1))
 		{
 				lift.move_velocity (100);
 		}
@@ -399,11 +365,11 @@ int turn        = master.get_analog (ANALOG_RIGHT_X);
 		//stacker
 		if(master.get_digital(DIGITAL_R2))
 		{
-				stacker.move_velocity (75);
+				stacker.move_velocity (100);
 		}
 		else if(master.get_digital(DIGITAL_R1))
 		{
-				stacker.move_velocity (-100);
+				stacker.move_velocity (-125);
 		}
 		else
 		{

@@ -16,27 +16,27 @@ static lv_res_t btnm_action(lv_obj_t * btnm, const char *txt) {
 
   switch (btnm_num) {
   case 1:
-    lv_label_set_text(g_sb_label, "Red Right Auton");
+    lv_label_set_text(g_sb_label, "Red Big Auton");
     auton_sel = 1;
     break;
   case 2:
-    lv_label_set_text(g_sb_label, "Red Left Auton");
+    lv_label_set_text(g_sb_label, "Blue Big Auton");
     auton_sel = 2;
     break;
   case 3:
-    lv_label_set_text(g_sb_label, "Blue Right Auton");
+    lv_label_set_text(g_sb_label, "Red Small Auton");
     auton_sel = 3;
 break;
   case 4:
-    lv_label_set_text(g_sb_label, "Blue Left Auton");
+    lv_label_set_text(g_sb_label, "Blue Small Auton");
     auton_sel = 4;
 break;
   case 5:
-    lv_label_set_text(g_sb_label, "Skills Auton1");
+    lv_label_set_text(g_sb_label, "Skills Auton");
     auton_sel = 5;
 break;
   case 6:
-    lv_label_set_text(g_sb_label, "Skills Auton2");
+    lv_label_set_text(g_sb_label, "No Auton");
     auton_sel = 6;
 break;
   }
