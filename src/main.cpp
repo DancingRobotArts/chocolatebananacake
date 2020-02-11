@@ -22,7 +22,7 @@
  */
 void initialize() {
   pros::delay(100);
-  gui();
+	lv_ex_tabview_1();
 }
 
 /**
@@ -55,17 +55,13 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-
-  redblue side=red;
-  frontback isfront=front;
-
   // 1 red big
   // 2 blue big
   // 3 red small
   // 4 blue small
   // 5 skills 1
   // 6 none
-
+  lv_tabview_set_tab_act(tabview, 1, LV_ANIM_NONE);
   switch(auton_sel) // assign value to side and isfront based on the auto selection button pressed
   {
     case 1:
@@ -269,38 +265,22 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
  void opcontrol() {
-
-   char mytext[64];       /*Create a screen*/
-lv_obj_t * scr = lv_obj_create(NULL, NULL);
-lv_scr_load(scr);                                  /*Load the screen*/
-   lv_obj_clean(lv_scr_act());  // clean screen
-  lv_obj_t * title = lv_label_create(lv_scr_act(), NULL);
-  lv_label_set_text(title, "Debug");
-  lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_MID, 0, 20);  /*Align to the top*/
-
-  /*Create a new label*/
-  lv_obj_t * txt = lv_label_create(lv_scr_act(), NULL);
-  //lv_obj_set_style(txt, &style_txt);                    /*Set the created style*/
-  lv_label_set_long_mode(txt, LV_LABEL_LONG_BREAK);     /*Break the long lines*/
-  lv_label_set_recolor(txt, true);                      /*Enable re-coloring by commands in the text*/
-  lv_label_set_align(txt, LV_LABEL_ALIGN_LEFT);       /*Center aligned lines*/
-  lv_label_set_text(txt, NULL);
-  lv_obj_set_width(txt, 500);                           /*Set a width*/
-  lv_obj_align(txt, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 20);      /*Align to center*/
+  lv_tabview_set_tab_act(tabview, 2, LV_ANIM_NONE);
+  char mytext[64];
 
 	while (true) {
                                         // assign value to mytext
-sprintf(mytext,
+  sprintf(mytext,
   "leftfront:  %8.2f\n"
   "rightfront: %8.2f\n"
-  "stacker:    %d\n"
+  "stacker:    %8.2f\n"
   "arm:        %8.2f",
      leftfront.get_position(),
      rightfront.get_position(),
      stacker.get_position(),
      lift.get_position()
    );                               // print to screen
-lv_label_set_text(txt, mytext);
+   lv_label_set_text(txt, mytext);
 
 		leftfront.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
   	leftback.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
