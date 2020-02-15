@@ -12,7 +12,7 @@
  pros::Motor clawleft   (8, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor clawright  (9, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor lift       (10, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor stacker    (20, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor stacker    (20, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
  void basePID(double target) {
    MiniPID pid=MiniPID(0.3,0,0.1);
@@ -43,6 +43,15 @@ void liftPID(double target) {
         ticks);
     lift.move(output);
   }
+}
+
+void stackerP(double target) {
+    double start=lift.get_position();
+    double ticks = (target)+start;
+    while (fabs(lift.get_position()-ticks)>10) {
+    double error=ticks-stacker.get_position();
+      lift.move(error*0.3);
+    }
 }
 /**
  * Runs initialization code. This occurs as soon as the program is started.
