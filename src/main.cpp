@@ -1,6 +1,7 @@
 #include "main.h"
 #include "config.hpp"
 #include "gui.h"
+#include "MiniPID.h"
 
 
  pros::Controller master(pros::E_CONTROLLER_MASTER);
@@ -13,7 +14,36 @@
  pros::Motor lift       (10, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor stacker    (20, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
 
+ void basePID(double target) {
+   MiniPID pid=MiniPID(0.3,0,0.1);
 
+   pid.setOutputLimits(-80,80);
+   pid.setOutputRampRate(5);
+   double start=leftfront.get_position();
+   double ticks = (target*900)/(4*M_PI)+start;
+   while (fabs(leftfront.get_position()-ticks)>10) {
+     double output=pid.getOutput(leftfront.get_position(),
+         ticks);
+     leftback.move(output);
+     leftfront.move(output);
+     rightback.move(output);
+     rightfront.move(output);
+   }
+}
+
+void liftPID(double target) {
+  MiniPID pid=MiniPID(0.3,0,0.1);
+
+  pid.setOutputLimits(-80,80);
+  pid.setOutputRampRate(5);
+  double start=lift.get_position();
+  double ticks = (target)+start;
+  while (fabs(lift.get_position()-ticks)>10) {
+    double output=pid.getOutput(lift.get_position(),
+        ticks);
+    lift.move(output);
+  }
+}
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *

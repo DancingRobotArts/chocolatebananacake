@@ -42,7 +42,7 @@ break;
     auton_sel = 5;
 break;
   case 6:
-    lv_label_set_text(g_sb_label, "Skills Auton2");
+    lv_label_set_text(g_sb_label, "No Auton");
     auton_sel = 6;
 break;
   }
@@ -55,7 +55,7 @@ void gui_btnm(void) {
   // Create a button descriptor string array w/ no repeat "\224"
   //gui_btnm();
   static const char * btnm_map[] = { "\2241 Red Big", "\2242 Blue Big", "\2243 Red Small", "\n",
-                                     "\2244 Blue Small", "\2245 Skill 1", "\2246 Skill2", "" };
+                                     "\2244 Blue Small", "\2245 Skill 1", "\2246 No Auton", "" };
 
   // Create a default button matrix* no repeat
   lv_obj_t *btnm = lv_btnm_create(tab1, NULL);
