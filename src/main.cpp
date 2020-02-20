@@ -28,6 +28,7 @@
      leftfront.move(output);
      rightback.move(output);
      rightfront.move(output);
+     pros::delay(20);
    }
 }
 
@@ -42,6 +43,7 @@ void liftPID(double target) {
     double output=pid.getOutput(lift.get_position(),
         ticks);
     lift.move(output);
+    pros::delay(20);
   }
 }
 
@@ -51,6 +53,7 @@ void stackerP(double target) {
     while (fabs(lift.get_position()-ticks)>10) {
     double error=ticks-stacker.get_position();
       lift.move(error*0.3);
+      pros::delay(20);
     }
 }
 /**
@@ -303,6 +306,15 @@ void autonomous() {
   lv_tabview_set_tab_act(tabview, 2, LV_ANIM_NONE);
   char mytext[64];
 
+  leftfront.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
+  leftback.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
+  rightfront.set_brake_mode (pros::E_MOTOR_BRAKE_HOLD);
+  rightback.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
+  clawright.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
+  clawleft.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
+  lift.set_brake_mode       (pros::E_MOTOR_BRAKE_HOLD);
+  stacker.set_brake_mode    (pros::E_MOTOR_BRAKE_HOLD);
+
 	while (true) {
                                         // assign value to mytext
   sprintf(mytext,
@@ -316,15 +328,6 @@ void autonomous() {
      lift.get_position()
    );                               // print to screen
    lv_label_set_text(txt, mytext);
-
-		leftfront.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
-  	leftback.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
-		rightfront.set_brake_mode (pros::E_MOTOR_BRAKE_HOLD);
-		rightback.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
-		clawright.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
-		clawleft.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
-		lift.set_brake_mode       (pros::E_MOTOR_BRAKE_HOLD);
-		stacker.set_brake_mode    (pros::E_MOTOR_BRAKE_HOLD);
 
 int forwardback = master.get_analog (ANALOG_LEFT_Y);
 int stride      = master.get_analog (ANALOG_LEFT_X);
