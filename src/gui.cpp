@@ -8,6 +8,7 @@
 // forward declaration of following two objects
 lv_obj_t * txt ;
 lv_obj_t * tabview ;
+lv_obj_t * label;
 
 int auton_sel = 0;
 float kP=0.0;
@@ -153,7 +154,7 @@ void lv_ex_tabview_1(void)
 
 
     label = lv_label_create(tab2, NULL);
-    lv_label_set_text(label, "Second tab");
+    lv_label_set_text(label, "autonomous tab");
 
     //label = lv_label_create(tab3, NULL);
     //lv_label_set_text(label, NULL);
