@@ -158,9 +158,12 @@ void autonomous() {
 
       clawleft.move_velocity(100);       //intake cubes
       clawright.move_velocity(100);
+      basePID(24);                       //move forwards
       pros::delay(4000);
 
-      basePID(24);                       //move forwards
+      clawleft.move_velocity(0);       //stop intake
+      clawright.move_velocity(0);
+      pros::delay(50);
 
       basePID(-12);                      //backwards
 
