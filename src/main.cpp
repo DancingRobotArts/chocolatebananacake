@@ -151,133 +151,126 @@ void autonomous() {
     case 3:
     {
       lift.move_velocity(100);           //lift up
-      pros::delay(1000);
+      pros::delay(750);
 
       lift.move_velocity(-100);          //lift down
-      pros::delay(1000);
+      pros::delay(750);
+
+      lift.move_velocity(-100);          //lift stop
+      pros::delay(50);
 
       clawleft.move_velocity(100);       //intake cubes
       clawright.move_velocity(100);
-      pros::delay(5000);
+      pros::delay(4000);
 
-      leftfront.move_velocity(100);      //move forwards
-      leftback.move_velocity(100);
-      rightfront.move_velocity(100);
-      rightback.move_velocity(100);
-      pros::delay(3000);
+      basePID(24);                       //move forwards
 
-      leftfront.move_velocity(-100);     //backwards
-      leftback.move_velocity(-100);
-      rightfront.move_velocity(-100);
-      rightback.move_velocity(-100);
-      pros::delay(2000);
+      basePID(-12);                      //backwards
 
-      leftfront.move_velocity(100);     //turn 145 right
+      leftfront.move_velocity(100);      //turn 145 right
       leftback.move_velocity(100);
       rightfront.move_velocity(-100);
       rightback.move_velocity(-100);
       pros::delay(750);
 
-      leftfront.move_velocity(100);      //move forwards
-      leftback.move_velocity(100);
-      rightfront.move_velocity(100);
-      rightback.move_velocity(100);
-      pros::delay(1000);
+      basePID(20);                    //move forwards
 
       leftfront.move_velocity(0);     //stop moving
       leftback.move_velocity(0);
       rightfront.move_velocity(0);
       rightback.move_velocity(0);
-      pros::delay(100);
+      pros::delay(50);
 
       clawleft.move_velocity(-50);     //intake out
       clawright.move_velocity(-50);
-      pros::delay(300);
+      pros::delay(200);
 
       clawleft.move_velocity(0);      //intake stop
       clawright.move_velocity(0);
       pros::delay(50);
 
       stacker.move_velocity(100);     //stacker out
-      pros::delay(1000);
+      pros::delay(1500);
 
-      stacker.move_velocity(-100);    //stacker in
+      stacker.move_velocity(0);      //stacker stop
+      pros::delay(50);
+
+      basePID(5);                    //move backwards
+
+      leftfront.move_velocity(0);    //stop moving
+      leftback.move_velocity(0);
+      rightfront.move_velocity(0);
+      rightback.move_velocity(0);
+      pros::delay(50);
+
+      stacker.move_velocity(-100);   //stacker in
       pros::delay(1000);
 
       stacker.move_velocity(0);      //stacker stop
       pros::delay(50);
 
-      leftfront.move_velocity(-100);     //move backwards
+      break;
+    }
+    case 4:
+    {
+      lift.move_velocity(100);           //lift up
+      pros::delay(750);
+
+      lift.move_velocity(-100);          //lift down
+      pros::delay(750);
+
+      lift.move_velocity(-100);          //lift stop
+      pros::delay(50);
+
+      clawleft.move_velocity(100);       //intake cubes
+      clawright.move_velocity(100);
+      pros::delay(4500);
+
+      basePID(24);                       //move forwards
+
+      basePID(-12);                      //backwards
+
+      leftfront.move_velocity(-100);      //turn 145 left
       leftback.move_velocity(-100);
-      rightfront.move_velocity(-100);
-      rightback.move_velocity(-100);
-      pros::delay(500);
+      rightfront.move_velocity(100);
+      rightback.move_velocity(100);
+      pros::delay(750);
+
+      basePID(20);                    //move forwards
 
       leftfront.move_velocity(0);     //stop moving
       leftback.move_velocity(0);
       rightfront.move_velocity(0);
       rightback.move_velocity(0);
       pros::delay(50);
-      break;
-    }
-    case 4:
-    {
-      leftfront.move_velocity(100);     //move forwards
-      leftback.move_velocity(100);
-      rightfront.move_velocity(100);
-      rightback.move_velocity(100);
-      pros::delay(4000);
 
-      clawleft.move_velocity(100);      //intake cubes
-      clawright.move_velocity(100);
-      pros::delay(5000);
-
-      leftfront.move_velocity(-100);      //turn 90 left
-      leftback.move_velocity(-100);
-      rightfront.move_velocity(100);
-      rightback.move_velocity(100);
-      pros::delay(750);
-
-      leftfront.move_velocity(-100);      //stride left
-      leftback.move_velocity(100);
-      rightfront.move_velocity(100);
-      rightback.move_velocity(-100);
-      pros::delay(4000);
-
-      leftfront.move_velocity(0);     //stop moving
-      leftback.move_velocity(0);
-      rightfront.move_velocity(0);
-      rightback.move_velocity(0);
-      pros::delay(100);
-
-      clawleft.move_velocity(-50);      //intake out
+      clawleft.move_velocity(-50);     //intake out
       clawright.move_velocity(-50);
-      pros::delay(500);
+      pros::delay(200);
 
       clawleft.move_velocity(0);      //intake stop
       clawright.move_velocity(0);
-      pros::delay(100);
+      pros::delay(50);
 
       stacker.move_velocity(100);     //stacker out
-      pros::delay(1000);
+      pros::delay(1500);
 
-      stacker.move_velocity(-100);      //stacker in
-      pros::delay(1000);
+      stacker.move_velocity(0);      //stacker stop
+      pros::delay(50);
 
-      stacker.move_velocity(0);     //stacker stop
-      pros::delay(100);
+      basePID(5);                    //move backwards
 
-      leftfront.move_velocity(-100);      //move backwards
-      leftback.move_velocity(-100);
-      rightfront.move_velocity(-100);
-      rightback.move_velocity(-100);
-      pros::delay(1000);
-
-      leftfront.move_velocity(0);     //stop moving
+      leftfront.move_velocity(0);    //stop moving
       leftback.move_velocity(0);
       rightfront.move_velocity(0);
       rightback.move_velocity(0);
-      pros::delay(100);
+      pros::delay(50);
+
+      stacker.move_velocity(-100);   //stacker in
+      pros::delay(1000);
+
+      stacker.move_velocity(0);      //stacker stop
+      pros::delay(50);
       break;
     }
     case 5:
