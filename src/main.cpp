@@ -156,7 +156,7 @@ void autonomous() {
       lift.move_velocity(-100);          //lift down
       pros::delay(750);
 
-      lift.move_velocity(-100);          //lift stop
+      lift.move_velocity(0);          //lift stop
       pros::delay(50);
 
       clawleft.move_velocity(100);       //intake cubes
@@ -178,12 +178,6 @@ void autonomous() {
 
       basePID(20);                    //move forwards
 
-      leftfront.move_velocity(0);     //stop moving
-      leftback.move_velocity(0);
-      rightfront.move_velocity(0);
-      rightback.move_velocity(0);
-      pros::delay(50);
-
       clawleft.move_velocity(-50);     //intake out
       clawright.move_velocity(-50);
       pros::delay(200);
@@ -198,7 +192,7 @@ void autonomous() {
       stacker.move_velocity(0);      //stacker stop
       pros::delay(50);
 
-      basePID(5);                    //move backwards
+      basePID(-5);                    //move backwards
 
       leftfront.move_velocity(0);    //stop moving
       leftback.move_velocity(0);
