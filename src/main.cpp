@@ -11,27 +11,26 @@
  pros::Motor rightback  (17, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor clawleft   (8, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor clawright  (9, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor lift       (10, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
- pros::Motor stacker    (20, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor lift   	(10, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::Motor stacker	(20, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
- void basePID(double target) {
+ void basePID(double target, double speedmax) {
    MiniPID pid=MiniPID(0.3,0,0.1);
 
-   pid.setOutputLimits(-80,80);
+   pid.setOutputLimits(-speedmax,speedmax);
    pid.setOutputRampRate(5);
    double start=leftfront.get_position();
    double ticks = (target*900)/(4*M_PI)+start;
-   while (fabs(leftfront.get_position()-ticks)>10) {
-     double output=pid.getOutput(leftfront.get_position(),
-         ticks);
-     leftback.move(output);
-     leftfront.move(output);
-     rightback.move(output);
-     rightfront.move(output);
-     pros::delay(20);
-
-     if (leftfront.get_actual_velocity()==0 && rightfront.get_actual_velocity()==0)
-     break;
+   while (fabs(leftfront.get_position()-ticks)>20) {
+ 	double output=pid.getOutput(leftfront.get_position(),
+     	ticks);
+ 	leftback.move(output);
+ 	leftfront.move(output);
+ 	rightback.move(output);
+ 	rightfront.move(output);
+  pros::delay(20);
+  if (leftfront.get_actual_velocity()==0 && rightfront.get_actual_velocity()==0)
+  break;
    }
 }
 
@@ -43,22 +42,35 @@ void liftPID(double target) {
   double start=lift.get_position();
   double ticks = (target)+start;
   while (fabs(lift.get_position()-ticks)>10) {
-    double output=pid.getOutput(lift.get_position(),
-        ticks);
-    lift.move(output);
-    pros::delay(20);
+	double output=pid.getOutput(lift.get_position(),
+    	ticks);
+	lift.move(output);
   }
 }
 
 void stackerP(double target) {
-    double start=lift.get_position();
-    double ticks = (target)+start;
-    while (fabs(lift.get_position()-ticks)>10) {
-    double error=ticks-stacker.get_position();
-      lift.move(error*0.3);
-      pros::delay(20);
-    }
+	double start=lift.get_position();
+	double ticks = (target)+start;
+	while (fabs(lift.get_position()-ticks)>10) {
+	double error=ticks-stacker.get_position();
+  	lift.move(error*0.3);
+	}
 }
+
+void Tdisplay (void*) {
+  char displaytext[100];
+  while (1) {
+    sprintf(displaytext,
+            "tray: %8.2f,\n"
+            "leftfront:%8.2f @: %5.1f rightfront:%8.2f @: %5.1f\n",
+            lift.get_position(),
+            leftfront.get_position(), leftfront.get_actual_velocity(), rightfront.get_position(),  rightfront.get_actual_velocity()
+    );
+    lv_label_set_text(label, displaytext);
+    pros::delay(100);
+  }
+}
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -67,7 +79,7 @@ void stackerP(double target) {
  */
 void initialize() {
   pros::delay(100);
-	lv_ex_tabview_1();
+ lv_ex_tabview_1();
 }
 
 /**
@@ -107,182 +119,194 @@ void autonomous() {
   // 5 skills 1
   // 6 none
   lv_tabview_set_tab_act(tabview, 1, LV_ANIM_NONE);
+  //pros::Task T_display(Tdisplay);
+
   switch(auton_sel) // assign value to side and isfront based on the auto selection button pressed
   {
-    case 1:
-    {
-      leftfront.move_velocity(100);      //front
-      leftback.move_velocity(100);
-      rightfront.move_velocity(100);
-      rightback.move_velocity(100);
-      pros::delay(2000);
+	case 1:
+	{
+  	leftfront.move_velocity(100);  	//front
+  	leftback.move_velocity(100);
+  	rightfront.move_velocity(100);
+  	rightback.move_velocity(100);
+  	pros::delay(2000);
 
-      leftfront.move_velocity(-100);     //back
-      leftback.move_velocity(-100);
-      rightfront.move_velocity(-100);
-      rightback.move_velocity(-100);
-      pros::delay(1200);
+  	leftfront.move_velocity(-100); 	//back
+  	leftback.move_velocity(-100);
+  	rightfront.move_velocity(-100);
+  	rightback.move_velocity(-100);
+  	pros::delay(1200);
 
-      leftfront.move_velocity(0);      //stop
-      leftback.move_velocity(0);
-      rightfront.move_velocity(0);
-      rightback.move_velocity(0);
-      pros::delay(1500);
-      break;
-    }
-    case 2:
-    {
-      leftfront.move_velocity(100);      //forwards
-      leftback.move_velocity(100);
-      rightfront.move_velocity(100);
-      rightback.move_velocity(100);
-      pros::delay(2000);
+  	leftfront.move_velocity(0);  	//stop
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(1500);
+  	break;
+	}
+	case 2:
+	{
+  	leftfront.move_velocity(100);  	//forwards
+  	leftback.move_velocity(100);
+  	rightfront.move_velocity(100);
+  	rightback.move_velocity(100);
+  	pros::delay(2000);
 
-      leftfront.move_velocity(-100);     //backwards
-      leftback.move_velocity(-100);
-      rightfront.move_velocity(-100);
-      rightback.move_velocity(-100);
-      pros::delay(1200);
+  	leftfront.move_velocity(-100); 	//backwards
+  	leftback.move_velocity(-100);
+  	rightfront.move_velocity(-100);
+  	rightback.move_velocity(-100);
+  	pros::delay(1200);
 
-      leftfront.move_velocity(0);      //stop
-      leftback.move_velocity(0);
-      rightfront.move_velocity(0);
-      rightback.move_velocity(0);
-      pros::delay(1500);
-      break;
-    }
-    case 3:
-    {
-      lift.move_velocity(100);           //lift up
-      pros::delay(750);
+  	leftfront.move_velocity(0);  	//stop
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(1500);
+  	break;
+	}
+	case 3:
+	{
+  	lift.move_velocity(100);       	//lift up
+  	pros::delay(750);
 
-      lift.move_velocity(-100);          //lift down
-      pros::delay(750);
+  	lift.move_velocity(-100);      	//lift down
+  	pros::delay(750);
 
-      lift.move_velocity(0);          //lift stop
-      pros::delay(50);
+  	lift.move_velocity(0);      	//lift stop
+  	pros::delay(50);
 
-      clawleft.move_velocity(100);       //intake cubes
-      clawright.move_velocity(100);
-      basePID(24);                       //move forwards
-      pros::delay(4000);
+  	clawleft.move_velocity(100);   	//intake cubes
+  	clawright.move_velocity(100);
+  	basePID(48,50);                   	//move forwards
+  	pros::delay(2000);
 
-      clawleft.move_velocity(0);       //stop intake
-      clawright.move_velocity(0);
-      pros::delay(50);
+  	clawleft.move_velocity(0);   	//stop intake
+  	clawright.move_velocity(0);
+  	pros::delay(50);
 
-      basePID(-12);                      //backwards
+  	basePID(-30,75);                  	//backwards
 
-      leftfront.move_velocity(100);      //turn 145 right
-      leftback.move_velocity(100);        //add move relative
-      rightfront.move_velocity(-100);
-      rightback.move_velocity(-100);
-      pros::delay(750);
+  	leftfront.move_relative(700.40, 75);  	//turn 145 right
+  	leftback.move_relative(700.40, 75);
+  	rightfront.move_relative(-636.00, 75);
+  	rightback.move_relative(-636.00, 75);
+  	pros::delay(750);
 
-      basePID(20);                    //move forwards
+  	basePID(17,50);                	//move forwards
 
-      clawleft.move_velocity(-50);     //intake out
-      clawright.move_velocity(-50);
-      pros::delay(200);
+  	leftfront.move_velocity(0); 	//stop moving
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(50);
 
-      clawleft.move_velocity(0);      //intake stop
-      clawright.move_velocity(0);
-      pros::delay(50);
+  	clawleft.move_velocity(-50); 	//intake out
+  	clawright.move_velocity(-50);
+  	pros::delay(500);
 
-      stacker.move_velocity(100);     //stacker out
-      pros::delay(1500);
+  	clawleft.move_velocity(0);  	//intake stop
+  	clawright.move_velocity(0);
+  	pros::delay(50);
 
-      stacker.move_velocity(0);      //stacker stop
-      pros::delay(50);
+  	stacker.move_relative(-1717986918,75); 	//stacker out
+  	pros::delay(5000);
 
-      basePID(-5);                    //move backwards
+  	stacker.move_velocity(0);  	//stacker stop
+  	pros::delay(50);
 
-      leftfront.move_velocity(0);    //stop moving
-      leftback.move_velocity(0);
-      rightfront.move_velocity(0);
-      rightback.move_velocity(0);
-      pros::delay(50);
+  	basePID(5,75);                	//move backwards
 
-      stacker.move_velocity(-100);   //stacker in
-      pros::delay(1000);
+  	leftfront.move_velocity(0);	//stop moving
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(50);
 
-      stacker.move_velocity(0);      //stacker stop
-      pros::delay(50);
+  	stacker.move_velocity(-100);   //stacker in
+  	pros::delay(1000);
 
-      break;
-    }
-    case 4:
-    {
-      lift.move_velocity(100);           //lift up
-      pros::delay(750);
+  	stacker.move_velocity(0);  	//stacker stop
+  	pros::delay(50);
 
-      lift.move_velocity(-100);          //lift down
-      pros::delay(750);
+  	break;
+	}
+	case 4:
+	{
+  	lift.move_velocity(100);       	//lift up
+  	pros::delay(750);
 
-      lift.move_velocity(0);          //lift stop
-      pros::delay(50);
+  	lift.move_velocity(-100);      	//lift down
+  	pros::delay(750);
 
-      clawleft.move_velocity(100);       //intake cubes
-      clawright.move_velocity(100);
-      basePID(24);                       //move forwards
-      pros::delay(4000);
+  	lift.move_velocity(-100);      	//lift stop
+  	pros::delay(50);
 
-      clawleft.move_velocity(0);       //stop intake
-      clawright.move_velocity(0);
-      pros::delay(50);
+  	clawleft.move_velocity(100);   	//intake cubes
+  	clawright.move_velocity(100);
+  	pros::delay(4500);
 
-      basePID(-12);                      //backwards
+  	basePID(36,50);                   	//move forwards
 
-      leftfront.move_velocity(-100);      //turn 145 right
-      leftback.move_velocity(-100);       //add move relative
-      rightfront.move_velocity(100);
-      rightback.move_velocity(100);
-      pros::delay(750);
+  	basePID(-30,75);                  	//backwards
 
-      basePID(20);                    //move forwards
+  	leftfront.move_relative(-616.00, 75);  	//turn 145 left
+  	leftback.move_relative(-616.00, 75);
+  	rightfront.move_relative(680.40, 75);
+  	rightback.move_relative(680.40, 75);
+  	pros::delay(750);
 
-      clawleft.move_velocity(-50);     //intake out
-      clawright.move_velocity(-50);
-      pros::delay(200);
+  	basePID(17,50);                	//move forwards
 
-      clawleft.move_velocity(0);      //intake stop
-      clawright.move_velocity(0);
-      pros::delay(50);
+  	leftfront.move_velocity(0); 	//stop moving
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(50);
 
-      stacker.move_velocity(100);     //stacker out
-      pros::delay(1500);
+  	clawleft.move_velocity(-50); 	//intake out
+  	clawright.move_velocity(-50);
+  	pros::delay(200);
 
-      stacker.move_velocity(0);      //stacker stop
-      pros::delay(50);
+  	clawleft.move_velocity(0);  	//intake stop
+  	clawright.move_velocity(0);
+  	pros::delay(50);
 
-      basePID(-5);                    //move backwards
+  	stacker.move_relative(-1717986918,75); 	//stacker out
+  	pros::delay(1500);
 
-      leftfront.move_velocity(0);    //stop moving
-      leftback.move_velocity(0);
-      rightfront.move_velocity(0);
-      rightback.move_velocity(0);
-      pros::delay(50);
+  	stacker.move_velocity(0);  	//stacker stop
+  	pros::delay(50);
 
-      stacker.move_velocity(-100);   //stacker in
-      pros::delay(1000);
+  	basePID(5,75);                	//move backwards
 
-      stacker.move_velocity(0);      //stacker stop
-      pros::delay(50);
-      break;
-    }
-    case 5:
-    {
-      break;
-    }
-    case 6:
-    {
-      break;
-    }
-    default:
-    {
-      break;
-    }
-  }}
+  	leftfront.move_velocity(0);	//stop moving
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(50);
+
+  	stacker.move_velocity(-100);   //stacker in
+  	pros::delay(1000);
+
+  	stacker.move_velocity(0);  	//stacker stop
+  	pros::delay(50);
+  	break;
+	}
+	case 5:
+	{
+  	break;
+	}
+	case 6:
+	{
+  	break;
+	}
+	default:
+	{
+  	break;
+	}
+  }
+}
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -300,94 +324,98 @@ void autonomous() {
   lv_tabview_set_tab_act(tabview, 2, LV_ANIM_NONE);
   char mytext[64];
 
+ while (true) {
+                                    	// assign value to mytext
+  sprintf(mytext,
+  "leftfront:  %8.2f\n"
+  "leftback:  %8.2f\n"
+  "rightfront: %8.2f\n"
+  "rightback:  %8.2f\n"
+  "stacker:	%8.2f\n"
+  "arm:    	%8.2f",
+ 	leftfront.get_position(),
+ 	leftback.get_position(),
+ 	rightfront.get_position(),
+ 	rightback.get_position(),
+ 	stacker.get_position(),
+ 	lift.get_position()
+   );                           	// print to screen
+   lv_label_set_text(txt, mytext);
+
   leftfront.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
-  leftback.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
+   leftback.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
   rightfront.set_brake_mode (pros::E_MOTOR_BRAKE_HOLD);
   rightback.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
   clawright.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
   clawleft.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
-  lift.set_brake_mode       (pros::E_MOTOR_BRAKE_HOLD);
-  stacker.set_brake_mode    (pros::E_MOTOR_BRAKE_HOLD);
-
-	while (true) {
-                                        // assign value to mytext
-  sprintf(mytext,
-  "leftfront:  %8.2f\n"
-  "rightfront: %8.2f\n"
-  "stacker:    %8.2f\n"
-  "arm:        %8.2f",
-     leftfront.get_position(),
-     rightfront.get_position(),
-     stacker.get_position(),
-     lift.get_position()
-   );                               // print to screen
-   lv_label_set_text(txt, mytext);
+  lift.set_brake_mode   	(pros::E_MOTOR_BRAKE_HOLD);
+  stacker.set_brake_mode	(pros::E_MOTOR_BRAKE_HOLD);
 
 int forwardback = master.get_analog (ANALOG_LEFT_Y);
-int stride      = master.get_analog (ANALOG_LEFT_X);
-int turn        = master.get_analog (ANALOG_RIGHT_X);
+int stride  	= master.get_analog (ANALOG_LEFT_X);
+int turn    	= master.get_analog (ANALOG_RIGHT_X);
 
-		// chasis
-	leftfront.move  (forwardback + turn + stride);
-	leftback.move   (forwardback + turn - stride);
+  // chasis
+ leftfront.move  (forwardback + turn + stride);
+ leftback.move   (forwardback + turn - stride);
   rightfront.move (forwardback - turn - stride);
   rightback.move  (forwardback - turn + stride);
 
 
-		//lift
+  //lift
 
   if(master.get_digital(DIGITAL_Y))
-    {
-      lift.move_absolute(430.20, 100);
-    }
-    else if(master.get_digital(DIGITAL_B))
-      {
-        lift.move_absolute(617.20, 100);
-      }
-		else if(master.get_digital(DIGITAL_L1))
-		{
-				lift.move_velocity (100);
-		}
-		else if(master.get_digital(DIGITAL_L2))
-		{
-				lift.move_velocity (-100);
-		}
-		else
-		{
-			lift.move_velocity (0);
-		}
-
-		//clawintake
-		if(master.get_digital(DIGITAL_X))
-		{
-				clawleft.move_velocity (150);
-				clawright.move_velocity (150);
-		}
-		else if(master.get_digital(DIGITAL_A))
-		{
-				clawleft.move_velocity (-150);
-				clawright.move_velocity (-150);
-		}
-		else
-		{
-			clawleft.move_velocity (0);
-			clawright.move_velocity (0);
-		}
-
-		//stacker
-		if(master.get_digital(DIGITAL_R2))
-		{
-				stacker.move_velocity (100);
-		}
-		else if(master.get_digital(DIGITAL_R1))
-		{
-				stacker.move_velocity (-125);
-		}
-		else
-		{
-			stacker.move_velocity (0);
-		}
-
-		pros::delay(20);
+	{
+  	lift.move_absolute(450.00, 100);
 	}
+	else if(master.get_digital(DIGITAL_B))
+  	{
+    	lift.move_absolute(550.00, 100);
+  	}
+  else if(master.get_digital(DIGITAL_L1))
+  {
+    lift.move_velocity (100);
+  }
+  else if(master.get_digital(DIGITAL_L2))
+  {
+    lift.move_velocity (-100);
+  }
+  else
+  {
+   lift.move_velocity (0);
+  }
+
+  //clawintake
+  if(master.get_digital(DIGITAL_X))
+  {
+    clawleft.move_velocity (150);
+    clawright.move_velocity (150);
+  }
+  else if(master.get_digital(DIGITAL_A))
+  {
+    clawleft.move_velocity (-150);
+    clawright.move_velocity (-150);
+  }
+  else
+  {
+   clawleft.move_velocity (0);
+   clawright.move_velocity (0);
+  }
+
+  //stacker
+  if(master.get_digital(DIGITAL_R2))
+  {
+    stacker.move_velocity (50);
+  }
+  else if(master.get_digital(DIGITAL_R1))
+  {
+    stacker.move_velocity (-100);
+  }
+  else
+  {
+   stacker.move_velocity (0);
+  }
+
+  pros::delay(20);
+ }
 }
