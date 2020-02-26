@@ -15,13 +15,13 @@
  pros::Motor stacker	(20, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
  void basePID(double target, double speedmax) {
-   MiniPID pid=MiniPID(0.3,0,0.1);
+   MiniPID pid=MiniPID(0.35,0.002,0.1);
 
    pid.setOutputLimits(-speedmax,speedmax);
    pid.setOutputRampRate(5);
    double start=leftfront.get_position();
-   double ticks = (target*900)/(4*M_PI)+start;
-   while (fabs(leftfront.get_position()-ticks)>20) {
+   double ticks = (target*360)/(4*M_PI)+start;
+   while (fabs(leftfront.get_position()-ticks)>10) {
  	double output=pid.getOutput(leftfront.get_position(),
      	ticks);
  	leftback.move(output);
@@ -119,7 +119,7 @@ void autonomous() {
   // 5 skills 1
   // 6 none
   lv_tabview_set_tab_act(tabview, 1, LV_ANIM_NONE);
-  //pros::Task T_display(Tdisplay);
+  pros::Task T_display(Tdisplay);
 
   switch(auton_sel) // assign value to side and isfront based on the auto selection button pressed
   {
@@ -174,24 +174,24 @@ void autonomous() {
   	pros::delay(750);
 
   	lift.move_velocity(0);      	//lift stop
-  	pros::delay(50);
+  	pros::delay(20);
 
   	clawleft.move_velocity(100);   	//intake cubes
   	clawright.move_velocity(100);
   	basePID(48,50);                   	//move forwards
-  	pros::delay(2000);
+  	pros::delay(1500);
 
   	clawleft.move_velocity(0);   	//stop intake
   	clawright.move_velocity(0);
-  	pros::delay(50);
+  	pros::delay(20);
 
   	basePID(-30,75);                  	//backwards
 
-  	leftfront.move_relative(700.40, 75);  	//turn 145 right
-  	leftback.move_relative(700.40, 75);
-  	rightfront.move_relative(-636.00, 75);
-  	rightback.move_relative(-636.00, 75);
-  	pros::delay(750);
+  	leftfront.move_relative(700.40, 50);  	//turn 145 right
+  	leftback.move_relative(700.40, 50);
+  	rightfront.move_relative(-636.00, 50);
+  	rightback.move_relative(-636.00, 50);
+  	pros::delay(2000);
 
   	basePID(17,50);                	//move forwards
 
@@ -199,21 +199,21 @@ void autonomous() {
   	leftback.move_velocity(0);
   	rightfront.move_velocity(0);
   	rightback.move_velocity(0);
-  	pros::delay(50);
+  	pros::delay(20);
 
-  	clawleft.move_velocity(-50); 	//intake out
-  	clawright.move_velocity(-50);
-  	pros::delay(500);
+  	clawleft.move_velocity(-75); 	//intake out
+  	clawright.move_velocity(-75);
+  	pros::delay(250);
 
   	clawleft.move_velocity(0);  	//intake stop
   	clawright.move_velocity(0);
-  	pros::delay(50);
+  	pros::delay(20);
 
   	stacker.move_relative(-1717986918,75); 	//stacker out
-  	pros::delay(5000);
+  	pros::delay(3000);
 
   	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(50);
+  	pros::delay(25);
 
   	basePID(5,75);                	//move backwards
 
@@ -221,76 +221,79 @@ void autonomous() {
   	leftback.move_velocity(0);
   	rightfront.move_velocity(0);
   	rightback.move_velocity(0);
-  	pros::delay(50);
+  	pros::delay(25);
 
   	stacker.move_velocity(-100);   //stacker in
   	pros::delay(1000);
 
   	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(50);
+  	pros::delay(25);
 
   	break;
 	}
 	case 4:
 	{
-  	lift.move_velocity(100);       	//lift up
+    lift.move_velocity(100);       	//lift up
   	pros::delay(750);
 
   	lift.move_velocity(-100);      	//lift down
   	pros::delay(750);
 
-  	lift.move_velocity(-100);      	//lift stop
-  	pros::delay(50);
+  	lift.move_velocity(0);      	//lift stop
+  	pros::delay(20);
 
   	clawleft.move_velocity(100);   	//intake cubes
   	clawright.move_velocity(100);
-  	pros::delay(4500);
+  	basePID(46,50);                   	//move forwards
+  	pros::delay(1500);
 
-  	basePID(36,50);                   	//move forwards
+  	clawleft.move_velocity(0);   	//stop intake
+  	clawright.move_velocity(0);
+  	pros::delay(20);
 
   	basePID(-30,75);                  	//backwards
 
-  	leftfront.move_relative(-616.00, 75);  	//turn 145 left
-  	leftback.move_relative(-616.00, 75);
-  	rightfront.move_relative(680.40, 75);
-  	rightback.move_relative(680.40, 75);
-  	pros::delay(750);
+  	leftfront.move_relative(-647.20, 50);  	//turn 145 left
+  	leftback.move_relative(-601.40, 50);
+  	rightfront.move_relative(715.80, 50);
+  	rightback.move_relative(623.80, 50);
+  	pros::delay(2000);
 
-  	basePID(17,50);                	//move forwards
+  	basePID(15,50);                	//move forwards
 
   	leftfront.move_velocity(0); 	//stop moving
   	leftback.move_velocity(0);
   	rightfront.move_velocity(0);
   	rightback.move_velocity(0);
-  	pros::delay(50);
+  	pros::delay(20);
 
-  	clawleft.move_velocity(-50); 	//intake out
-  	clawright.move_velocity(-50);
-  	pros::delay(200);
+  	clawleft.move_velocity(-75); 	//intake out
+  	clawright.move_velocity(-75);
+  	pros::delay(250);
 
   	clawleft.move_velocity(0);  	//intake stop
   	clawright.move_velocity(0);
-  	pros::delay(50);
+  	pros::delay(20);
 
-  	stacker.move_relative(-1717986918,75); 	//stacker out
-  	pros::delay(1500);
+  	stacker.move_relative(-750.00,75); 	//stacker out
+  	pros::delay(3000);
 
   	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(50);
+  	pros::delay(25);
 
-  	basePID(5,75);                	//move backwards
+  	basePID(-8,75);                	//move backwards
 
   	leftfront.move_velocity(0);	//stop moving
   	leftback.move_velocity(0);
   	rightfront.move_velocity(0);
   	rightback.move_velocity(0);
-  	pros::delay(50);
+  	pros::delay(25);
 
-  	stacker.move_velocity(-100);   //stacker in
+  	stacker.move_relative(748.00, 75);   //stacker in
   	pros::delay(1000);
 
   	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(50);
+  	pros::delay(25);
   	break;
 	}
 	case 5:
@@ -299,6 +302,7 @@ void autonomous() {
 	}
 	case 6:
 	{
+
   	break;
 	}
 	default:
@@ -321,43 +325,43 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
  void opcontrol() {
-  lv_tabview_set_tab_act(tabview, 2, LV_ANIM_NONE);
-  char mytext[64];
 
- while (true) {
-                                    	// assign value to mytext
-  sprintf(mytext,
-  "leftfront:  %8.2f\n"
-  "leftback:  %8.2f\n"
-  "rightfront: %8.2f\n"
-  "rightback:  %8.2f\n"
-  "stacker:	%8.2f\n"
-  "arm:    	%8.2f",
- 	leftfront.get_position(),
- 	leftback.get_position(),
- 	rightfront.get_position(),
- 	rightback.get_position(),
- 	stacker.get_position(),
- 	lift.get_position()
-   );                           	// print to screen
-   lv_label_set_text(txt, mytext);
-
-  leftfront.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
+   leftfront.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
    leftback.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
-  rightfront.set_brake_mode (pros::E_MOTOR_BRAKE_HOLD);
-  rightback.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
-  clawright.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
-  clawleft.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
-  lift.set_brake_mode   	(pros::E_MOTOR_BRAKE_HOLD);
-  stacker.set_brake_mode	(pros::E_MOTOR_BRAKE_HOLD);
+   rightfront.set_brake_mode (pros::E_MOTOR_BRAKE_HOLD);
+   rightback.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
+   clawright.set_brake_mode  (pros::E_MOTOR_BRAKE_HOLD);
+   clawleft.set_brake_mode   (pros::E_MOTOR_BRAKE_HOLD);
+   lift.set_brake_mode   	(pros::E_MOTOR_BRAKE_HOLD);
+   stacker.set_brake_mode	(pros::E_MOTOR_BRAKE_HOLD);
+   lv_tabview_set_tab_act(tabview, 2, LV_ANIM_NONE);
+   char mytext[64];
 
-int forwardback = master.get_analog (ANALOG_LEFT_Y);
-int stride  	= master.get_analog (ANALOG_LEFT_X);
-int turn    	= master.get_analog (ANALOG_RIGHT_X);
+   while (true) {
+                                    	// assign value to mytext
+    sprintf(mytext,
+    "leftfront:  %8.2f\n"
+    "leftback:  %8.2f\n"
+    "rightfront: %8.2f\n"
+    "rightback:  %8.2f\n"
+    "stacker:	%8.2f\n"
+    "arm:    	%8.2f",
+   	leftfront.get_position(),
+   	leftback.get_position(),
+   	rightfront.get_position(),
+   	rightback.get_position(),
+   	stacker.get_position(),
+   	lift.get_position()
+     );                           	// print to screen
+     lv_label_set_text(txt, mytext);
+
+  int forwardback = master.get_analog (ANALOG_LEFT_Y);
+  int stride  	= master.get_analog (ANALOG_LEFT_X);
+  int turn    	= master.get_analog (ANALOG_RIGHT_X);
 
   // chasis
- leftfront.move  (forwardback + turn + stride);
- leftback.move   (forwardback + turn - stride);
+  leftfront.move  (forwardback + turn + stride);
+  leftback.move   (forwardback + turn - stride);
   rightfront.move (forwardback - turn - stride);
   rightback.move  (forwardback - turn + stride);
 
