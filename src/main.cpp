@@ -167,80 +167,16 @@ void autonomous() {
 	}
 	case 3:
 	{
-  	lift.move_velocity(100);       	//lift up
-  	pros::delay(750);
-
-  	lift.move_velocity(-100);      	//lift down
-  	pros::delay(750);
-
-  	lift.move_velocity(0);      	//lift stop
-  	pros::delay(20);
-
-  	clawleft.move_velocity(100);   	//intake cubes
-  	clawright.move_velocity(100);
-  	basePID(48,50);                   	//move forwards
-  	pros::delay(1500);
-
-  	clawleft.move_velocity(0);   	//stop intake
-  	clawright.move_velocity(0);
-  	pros::delay(20);
-
-  	basePID(-30,75);                  	//backwards
-
-  	leftfront.move_relative(700.40, 50);  	//turn 145 right
-  	leftback.move_relative(700.40, 50);
-  	rightfront.move_relative(-636.00, 50);
-  	rightback.move_relative(-636.00, 50);
-  	pros::delay(2000);
-
-  	basePID(17,50);                	//move forwards
-
-  	leftfront.move_velocity(0); 	//stop moving
-  	leftback.move_velocity(0);
-  	rightfront.move_velocity(0);
-  	rightback.move_velocity(0);
-  	pros::delay(20);
-
-  	clawleft.move_velocity(-75); 	//intake out
-  	clawright.move_velocity(-75);
-  	pros::delay(250);
-
-  	clawleft.move_velocity(0);  	//intake stop
-  	clawright.move_velocity(0);
-  	pros::delay(20);
-
-  	stacker.move_relative(-1717986918,75); 	//stacker out
-  	pros::delay(3000);
-
-  	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(25);
-
-  	basePID(5,75);                	//move backwards
-
-  	leftfront.move_velocity(0);	//stop moving
-  	leftback.move_velocity(0);
-  	rightfront.move_velocity(0);
-  	rightback.move_velocity(0);
-  	pros::delay(25);
-
-  	stacker.move_velocity(-100);   //stacker in
-  	pros::delay(1000);
-
-  	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(25);
-
-  	break;
-	}
-	case 4:
-	{
     lift.move_velocity(100);       	//lift up
   	pros::delay(750);
 
   	lift.move_velocity(-100);      	//lift down
-  	pros::delay(750);
+    clawleft.move_velocity(-100);   	//intake cubes
+    clawright.move_velocity(-100);
+    pros::delay(750);
 
   	lift.move_velocity(0);      	//lift stop
-  	pros::delay(20);
+  	pros::delay(10);
 
   	clawleft.move_velocity(100);   	//intake cubes
   	clawright.move_velocity(100);
@@ -253,19 +189,19 @@ void autonomous() {
 
   	basePID(-30,75);                  	//backwards
 
-  	leftfront.move_relative(-647.20, 50);  	//turn 145 left
-  	leftback.move_relative(-601.40, 50);
-  	rightfront.move_relative(715.80, 50);
-  	rightback.move_relative(623.80, 50);
-  	pros::delay(2000);
+    leftfront.move_relative(613.60, 50);  	//turn 145 left
+  	leftback.move_relative(537.20, 50);
+  	rightfront.move_relative(-626.00, 50);
+  	rightback.move_relative(-582.00, 50);
+  	pros::delay(1400);
 
-  	basePID(15,50);                	//move forwards
+  	basePID(16,50);                	//move forwards
 
   	leftfront.move_velocity(0); 	//stop moving
   	leftback.move_velocity(0);
   	rightfront.move_velocity(0);
   	rightback.move_velocity(0);
-  	pros::delay(20);
+  	pros::delay(10);
 
   	clawleft.move_velocity(-75); 	//intake out
   	clawright.move_velocity(-75);
@@ -273,15 +209,17 @@ void autonomous() {
 
   	clawleft.move_velocity(0);  	//intake stop
   	clawright.move_velocity(0);
-  	pros::delay(20);
+  	pros::delay(10);
 
-  	stacker.move_relative(-750.00,75); 	//stacker out
+  	stacker.move_relative(-861,75); 	//stacker out
   	pros::delay(3000);
 
   	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(25);
+  	pros::delay(10);
 
-  	basePID(-8,75);                	//move backwards
+    basePID(5,75);
+
+  	basePID(-10,75);                	//move backwards
 
   	leftfront.move_velocity(0);	//stop moving
   	leftback.move_velocity(0);
@@ -289,11 +227,81 @@ void autonomous() {
   	rightback.move_velocity(0);
   	pros::delay(25);
 
-  	stacker.move_relative(748.00, 75);   //stacker in
+  	stacker.move_relative(861.00, 75);   //stacker in
   	pros::delay(1000);
 
   	stacker.move_velocity(0);  	//stacker stop
-  	pros::delay(25);
+  	pros::delay(10);
+
+  	break;
+	}
+	case 4:
+	{
+    lift.move_velocity(100);       	//lift up
+  	pros::delay(750);
+
+  	lift.move_velocity(-100);      	//lift down
+    clawleft.move_velocity(-100);   	//intake cubes
+    clawright.move_velocity(-100);
+  	pros::delay(750);
+
+  	lift.move_velocity(0);      	//lift stop
+  	pros::delay(20);
+
+  	clawleft.move_velocity(100);   	//intake cubes
+  	clawright.move_velocity(100);
+  	basePID(46,50);                   	//move forwards
+  	pros::delay(1400);
+
+  	clawleft.move_velocity(0);   	//stop intake
+  	clawright.move_velocity(0);
+  	pros::delay(10);
+
+  	basePID(-34,75);                  	//backwards
+
+  	leftfront.move_relative(-604.50, 50);  	//turn 145 left
+  	leftback.move_relative(-663.70, 50);
+  	rightfront.move_relative(688.10, 50);
+  	rightback.move_relative(580.90, 50);
+  	pros::delay(2000);
+
+  	basePID(15,75);                	//move forwards
+
+  	leftfront.move_velocity(0); 	//stop moving
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(10);
+
+  	clawleft.move_velocity(-75); 	//intake out
+  	clawright.move_velocity(-75);
+  	pros::delay(250);
+
+  	clawleft.move_velocity(0);  	//intake stop
+  	clawright.move_velocity(0);
+  	pros::delay(10);
+
+  	stacker.move_relative(-861,75); 	//stacker out
+  	pros::delay(3000);
+
+  	stacker.move_velocity(0);  	//stacker stop
+  	pros::delay(10);
+
+    basePID(3,50);
+
+  	basePID(-10,75);                	//move backwards
+
+  	leftfront.move_velocity(0);	//stop moving
+  	leftback.move_velocity(0);
+  	rightfront.move_velocity(0);
+  	rightback.move_velocity(0);
+  	pros::delay(10);
+
+  	stacker.move_relative(861.00, 75);   //stacker in
+  	pros::delay(1000);
+
+  	stacker.move_velocity(0);  	//stacker stop
+  	pros::delay(10);
   	break;
 	}
 	case 5:
@@ -303,6 +311,15 @@ void autonomous() {
 	case 6:
 	{
 
+    basePID(46,50);
+
+    basePID(-30,75);
+
+    leftfront.move_relative(613.60, 50);  	//turn 145 left
+  	leftback.move_relative(537.20, 50);
+  	rightfront.move_relative(-626.00, 50);
+  	rightback.move_relative(-582.00, 50);
+  	pros::delay(1400);
   	break;
 	}
 	default:
@@ -374,7 +391,7 @@ void autonomous() {
 	}
 	else if(master.get_digital(DIGITAL_B))
   	{
-    	lift.move_absolute(550.00, 100);
+    	lift.move_absolute(679.20, 100);
   	}
   else if(master.get_digital(DIGITAL_L1))
   {
