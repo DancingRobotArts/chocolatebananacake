@@ -3,7 +3,6 @@
 #include "gui.h"
 #include "MiniPID.h"
 
-
  pros::Controller master(pros::E_CONTROLLER_MASTER);
  pros::Motor leftfront  (1, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor leftback   (2, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
@@ -13,6 +12,7 @@
  pros::Motor clawright  (9, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor lift   	(10, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
  pros::Motor stacker	(20, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+ pros::ADIPotentiometer ADIstacker (1);
 
  void basePID(double target, double speedmax) {
    MiniPID pid=MiniPID(0.35,0.002,0.1);
@@ -211,8 +211,8 @@ void autonomous() {
   	clawright.move_velocity(0);
   	pros::delay(10);
 
-  	stacker.move_relative(-861,75); 	//stacker out
-  	pros::delay(3000);
+  	stacker.move_relative(-1850,50); 	//stacker out
+  	pros::delay(2000);
 
   	stacker.move_velocity(0);  	//stacker stop
   	pros::delay(10);
@@ -362,12 +362,14 @@ void autonomous() {
     "rightfront: %8.2f\n"
     "rightback:  %8.2f\n"
     "stacker:	%8.2f\n"
+    "ADIstacker:	%d\n"
     "arm:    	%8.2f",
    	leftfront.get_position(),
    	leftback.get_position(),
    	rightfront.get_position(),
    	rightback.get_position(),
    	stacker.get_position(),
+    ADIstacker.get_value(),
    	lift.get_position()
      );                           	// print to screen
      lv_label_set_text(txt, mytext);
@@ -424,15 +426,15 @@ void autonomous() {
   }
 
   //stacker
-  if(master.get_digital(DIGITAL_R2))
+  if(master.get_digital(DIGITAL_R2) && ADIstacker.get_value()<2100)
   {
-    stacker.move_velocity (50);
+    stacker.move_velocity (25);
   }
   else if(master.get_digital(DIGITAL_R1))
   {
     stacker.move_velocity (-100);
   }
-  else
+  else if(ADIstacker.get_value()>2100)
   {
    stacker.move_velocity (0);
   }
