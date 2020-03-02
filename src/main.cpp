@@ -426,15 +426,15 @@ void autonomous() {
   }
 
   //stacker
-  if(master.get_digital(DIGITAL_R2) && ADIstacker.get_value()<2100)
+  if(master.get_digital(DIGITAL_R2) && ADIstacker.get_value()>10)
   {
-    stacker.move_velocity (25);
+    stacker.move_velocity (75);
   }
-  else if(master.get_digital(DIGITAL_R1))
+  else if(master.get_digital(DIGITAL_R1) && ADIstacker.get_value()<2100)
   {
-    stacker.move_velocity (-100);
+    stacker.move_velocity (-25);
   }
-  else if(ADIstacker.get_value()>2100)
+  else
   {
    stacker.move_velocity (0);
   }
