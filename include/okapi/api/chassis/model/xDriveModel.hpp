@@ -1,6 +1,4 @@
 /*
- * @author Ryan Benasutti, WPI
- *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -10,6 +8,7 @@
 #include "okapi/api/chassis/model/chassisModel.hpp"
 #include "okapi/api/device/motor/abstractMotor.hpp"
 #include "okapi/api/device/rotarysensor/continuousRotarySensor.hpp"
+#include "okapi/api/units/QAngle.hpp"
 
 namespace okapi {
 class XDriveModel : public ChassisModel {
@@ -71,6 +70,28 @@ class XDriveModel : public ChassisModel {
   void rotate(double ipower) override;
 
   /**
+   * Drive the robot side-ways (using open-loop control) where positive ipower is
+   * to the right and negative ipower is to the left. Uses velocity mode.
+   *
+   * @param ispeed motor power
+   */
+  void strafe(double ipower);
+
+  /**
+   * Strafe the robot in an arc (using open-loop control) where positive istrafeSpeed is
+   * to the right and negative istrafeSpeed is to the left. Uses velocity mode.
+   * The algorithm is (approximately):
+   *   topLeftPower = -1 * istrafeSpeed + yaw
+   *   topRightPower = istrafeSpeed - yaw
+   *   bottomRightPower = -1 * istrafeSpeed - yaw
+   *   bottomLeftPower = istrafeSpeed + yaw
+   *
+   * @param istrafeSpeed speed to the right
+   * @param iyaw speed around the vertical axis
+   */
+  void strafeVector(double istrafeSpeed, double iyaw);
+
+  /**
    * Stop the robot (set all the motors to 0). Uses velocity mode.
    */
   void stop() override;
@@ -94,6 +115,18 @@ class XDriveModel : public ChassisModel {
   void arcade(double iforwardSpeed, double iyaw, double ithreshold = 0) override;
 
   /**
+   * Drive the robot with a curvature drive layout. The robot drives in constant radius turns
+   * where you control the curvature (inverse of radius) you drive in. This is advantageous
+   * because the forward speed will not affect the rate of turning. The algorithm switches to
+   * arcade if the forward speed is 0. Uses voltage mode.
+   *
+   * @param iforwardSpeed speed forward direction
+   * @param icurvature curvature (inverse of radius) to drive in
+   * @param ithreshold deadband on joystick values
+   */
+  void curvature(double iforwardSpeed, double icurvature, double ithreshold = 0) override;
+
+  /**
    * Drive the robot with an arcade drive layout. Uses voltage mode.
    *
    * @param irightSpeed speed to the right
@@ -103,6 +136,27 @@ class XDriveModel : public ChassisModel {
    */
   virtual void
   xArcade(double irightSpeed, double iforwardSpeed, double iyaw, double ithreshold = 0);
+
+  /**
+   * Drive the robot with a field-oriented arcade drive layout. Uses voltage mode.
+   * For example:
+   *    Both `fieldOrientedXArcade(1, 0, 0, 0_deg)` and `fieldOrientedXArcade(1, 0, 0, 90_deg)`
+   *    will drive the chassis in the forward/north direction. In other words, no matter
+   *    the robot's heading, the robot will move forward/north when you tell it
+   *    to move forward/north and will move right/east when you tell it to move right/east.
+   *
+   *
+   * @param ixSpeed forward speed -- (`+1`) forward, (`-1`) backward
+   * @param iySpeed sideways speed -- (`+1`) right, (`-1`) left
+   * @param iyaw turn speed -- (`+1`) clockwise, (`-1`) counter-clockwise
+   * @param iangle current chassis angle (`0_deg` = no correction, winds clockwise)
+   * @param ithreshold deadband on joystick values
+   */
+  virtual void fieldOrientedXArcade(double ixSpeed,
+                                    double iySpeed,
+                                    double iyaw,
+                                    QAngle iangle,
+                                    double ithreshold = 0);
 
   /**
    * Power the left side motors. Uses velocity mode.

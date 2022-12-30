@@ -1,6 +1,4 @@
 /*
- * @author Ryan Benasutti, WPI
- *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -122,12 +120,11 @@ static constexpr std::int8_t adiUpdateRate = 10;
  * @return `base^expo`.
  */
 constexpr double ipow(const double base, const int expo) {
-  return (expo == 0)
-           ? 1
-           : expo == 1 ? base
-                       : expo > 1 ? ((expo & 1) ? base * ipow(base, expo - 1)
-                                                : ipow(base, expo / 2) * ipow(base, expo / 2))
-                                  : 1 / ipow(base, -expo);
+  return (expo == 0) ? 1
+         : expo == 1 ? base
+         : expo > 1  ? ((expo & 1) ? base * ipow(base, expo - 1)
+                                   : ipow(base, expo / 2) * ipow(base, expo / 2))
+                     : 1 / ipow(base, -expo);
 }
 
 /**

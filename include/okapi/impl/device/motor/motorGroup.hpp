@@ -1,6 +1,4 @@
 /*
- * @author Ryan Benasutti, WPI
- *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -373,6 +371,13 @@ class MotorGroup : public AbstractMotor {
    * @param ivalue the controller's output in the range `[-1, 1]`
    */
   void controllerSet(double ivalue) override;
+
+  /**
+   * Gets the number of motors in the motor group.
+   *
+   * @return size_t
+   */
+  size_t getSize();
 
   /**
    * Get the encoder associated with the first motor in this group.

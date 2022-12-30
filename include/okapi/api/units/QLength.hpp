@@ -1,8 +1,4 @@
 /*
- * @author Mikhail Semenov
- * @author Benjamin Jurke
- * @author Ryan Benasutti, WPI
- *
  * This code is a modified version of Benjamin Jurke's work in 2015. You can read his blog post
  * here:
  * https://benjaminjurke.com/content/articles/2015/compile-time-numerical-unit-dimension-checking/
@@ -27,6 +23,7 @@ constexpr QLength inch = 2.54 * centimeter;
 constexpr QLength foot = 12 * inch;
 constexpr QLength yard = 3 * foot;
 constexpr QLength mile = 5280 * foot;
+constexpr QLength tile = 24 * inch;
 
 inline namespace literals {
 constexpr QLength operator"" _mm(long double x) {
@@ -53,6 +50,9 @@ constexpr QLength operator"" _ft(long double x) {
 constexpr QLength operator"" _in(long double x) {
   return static_cast<double>(x) * inch;
 }
+constexpr QLength operator"" _tile(long double x) {
+  return static_cast<double>(x) * tile;
+}
 constexpr QLength operator"" _mm(unsigned long long int x) {
   return static_cast<double>(x) * millimeter;
 }
@@ -76,6 +76,9 @@ constexpr QLength operator"" _ft(unsigned long long int x) {
 }
 constexpr QLength operator"" _in(unsigned long long int x) {
   return static_cast<double>(x) * inch;
+}
+constexpr QLength operator"" _tile(unsigned long long int x) {
+  return static_cast<double>(x) * tile;
 }
 } // namespace literals
 } // namespace okapi

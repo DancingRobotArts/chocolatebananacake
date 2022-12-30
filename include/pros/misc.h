@@ -10,7 +10,7 @@
  * This file should not be modified by users, since it gets replaced whenever
  * a kernel upgrade occurs.
  *
- * Copyright (c) 2017-2020, Purdue University ACM SIGBots.
+ * Copyright (c) 2017-2022, Purdue University ACM SIGBots.
  * All rights reservered.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -126,6 +126,49 @@ typedef enum {
 #define DIGITAL_A E_CONTROLLER_DIGITAL_A
 #endif
 #endif
+
+/*
+Given an id and a port, this macro sets the port 
+variable based on the id and allows the mutex to take that port.
+
+Returns error (in the function/scope it's in) if the controller
+failed to connect or an invalid id is given.
+*/
+#define CONTROLLER_PORT_MUTEX_TAKE(id, port) \
+	switch (id) {							\
+		case E_CONTROLLER_MASTER:			\
+			port = V5_PORT_CONTROLLER_1;	\
+			break;							\
+		case E_CONTROLLER_PARTNER:			\
+			port = V5_PORT_CONTROLLER_2;	\
+			break;							\
+		default:							\
+			errno = EINVAL;					\
+			return PROS_ERR;				\
+	}										\
+	if (!internal_port_mutex_take(port)) {	\
+		errno = EACCES;						\
+		return PROS_ERR;					\
+	}										\
+/******************************************************************************/
+/**                              Date and Time                               **/
+/******************************************************************************/
+
+extern const char* baked_date;
+extern const char* baked_time;
+
+typedef struct {
+	uint16_t year; // Year - 1980
+	uint8_t day;
+	uint8_t month; // 1 = January
+} date_s_t;
+
+typedef struct {
+	uint8_t hour;
+	uint8_t min;
+	uint8_t sec;
+	uint8_t sec_hund; // hundredths of a second
+} time_s_t;
 
 #ifdef __cplusplus
 namespace c {

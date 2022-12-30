@@ -1,6 +1,4 @@
 /*
- * @author Ryan Benasutti, WPI
- *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -83,12 +81,17 @@
 #include "okapi/impl/device/button/adiButton.hpp"
 #include "okapi/impl/device/button/controllerButton.hpp"
 #include "okapi/impl/device/controller.hpp"
+#include "okapi/impl/device/distanceSensor.hpp"
+#include "okapi/impl/device/motor/adiMotor.hpp"
 #include "okapi/impl/device/motor/motor.hpp"
 #include "okapi/impl/device/motor/motorGroup.hpp"
+#include "okapi/impl/device/opticalSensor.hpp"
+#include "okapi/impl/device/rotarysensor/IMU.hpp"
 #include "okapi/impl/device/rotarysensor/adiEncoder.hpp"
 #include "okapi/impl/device/rotarysensor/adiGyro.hpp"
 #include "okapi/impl/device/rotarysensor/integratedEncoder.hpp"
 #include "okapi/impl/device/rotarysensor/potentiometer.hpp"
+#include "okapi/impl/device/rotarysensor/rotationSensor.hpp"
 
 #include "okapi/api/filter/averageFilter.hpp"
 #include "okapi/api/filter/composableFilter.hpp"
@@ -118,12 +121,14 @@
 #include "okapi/api/units/QTime.hpp"
 #include "okapi/api/units/QTorque.hpp"
 #include "okapi/api/units/QVolume.hpp"
+#include "okapi/api/units/RQuantityName.hpp"
 
 #include "okapi/api/util/abstractRate.hpp"
 #include "okapi/api/util/abstractTimer.hpp"
 #include "okapi/api/util/mathUtil.hpp"
 #include "okapi/api/util/supplier.hpp"
 #include "okapi/api/util/timeUtil.hpp"
+#include "okapi/impl/util/configurableTimeUtilFactory.hpp"
 #include "okapi/impl/util/rate.hpp"
 #include "okapi/impl/util/timeUtilFactory.hpp"
 #include "okapi/impl/util/timer.hpp"

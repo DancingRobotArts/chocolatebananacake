@@ -1,6 +1,4 @@
 /*
- * @author Ryan Benasutti, WPI
- *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -101,7 +99,10 @@ class DefaultOdomChassisController : public OdomChassisController {
   void moveRawAsync(double itarget) override;
 
   /**
-   * This delegates to the input ChassisController.
+   * Turns chassis to desired angle (turns in the direction of smallest angle)
+   * (ex. If current angle is 0 and target is 270, the chassis will turn -90 degrees)
+   * 
+   * @param idegTarget target angle
    */
   void turnAngle(QAngle idegTarget) override;
 
@@ -111,7 +112,10 @@ class DefaultOdomChassisController : public OdomChassisController {
   void turnRaw(double idegTarget) override;
 
   /**
-   * This delegates to the input ChassisController.
+   * Turns chassis to desired angle (turns in the direction of smallest angle)
+   * (ex. If current angle is 0 and target is 270, the chassis will turn -90 degrees)
+   * 
+   * @param idegTarget target angle 
    */
   void turnAngleAsync(QAngle idegTarget) override;
 
